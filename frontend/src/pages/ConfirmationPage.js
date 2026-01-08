@@ -4,6 +4,9 @@ import { CheckCircle, Calendar, Clock, User, Mail, ArrowLeft } from 'lucide-reac
 import { format } from 'date-fns';
 import axios from 'axios';
 
+// ✅ 1. ADD BACKEND BASE URL
+const API_BASE_URL = "https://calendly-clone-backend-rabv.onrender.com";
+
 const ConfirmationPage = () => {
   const { bookingId } = useParams();
   const [booking, setBooking] = useState(null);
@@ -16,7 +19,11 @@ const ConfirmationPage = () => {
 
   const fetchBooking = async () => {
     try {
-      const response = await axios.get(`/api/meetings/${bookingId}`);
+      // const response = await axios.get(`/api/meetings/${bookingId}`);
+      // ✅ 2. FIX FETCH BOOKING API
+      const response = await axios.get(
+        `${API_BASE_URL}/api/meetings/${bookingId}`
+      );
       setBooking(response.data);
     } catch (err) {
       setError('Booking not found');

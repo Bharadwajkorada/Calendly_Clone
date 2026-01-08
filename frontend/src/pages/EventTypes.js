@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Link as LinkIcon } from 'lucide-react';
 import axios from 'axios';
 
+// ✅ BACKEND BASE URL (FIX)
+const API_BASE_URL = "https://calendly-clone-backend-rabv.onrender.com";
+
 const EventTypes = () => {
   const [eventTypes, setEventTypes] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -23,7 +26,9 @@ const EventTypes = () => {
 
   const fetchEventTypes = async () => {
     try {
-      const response = await axios.get('/api/event-types');
+      // const response = await axios.get('/api/event-types');
+      // ✅ FIXED API CALL
+      const response = await axios.get(`${API_BASE_URL}/api/event-types`);
       setEventTypes(response.data);
     } catch (err) {
       setError('Failed to fetch event types');
@@ -39,10 +44,17 @@ const EventTypes = () => {
 
     try {
       if (editingEvent) {
-        await axios.put(`/api/event-types/${editingEvent._id}`, formData);
+        // await axios.put(`/api/event-types/${editingEvent._id}`, formData);
+         // ✅ FIXED API CALL
+        await axios.put(
+          `${API_BASE_URL}/api/event-types/${editingEvent._id}`,
+          formData
+        );
         setSuccess('Event type updated successfully');
       } else {
-        await axios.post('/api/event-types', formData);
+        // await axios.post('/api/event-types', formData);
+         // ✅ FIXED API CALL
+        await axios.post(`${API_BASE_URL}/api/event-types`, formData);
         setSuccess('Event type created successfully');
       }
       
@@ -73,7 +85,9 @@ const EventTypes = () => {
     }
 
     try {
-      await axios.delete(`/api/event-types/${id}`);
+      // await axios.delete(`/api/event-types/${id}`);
+      // ✅ FIXED API CALL
+      await axios.delete(`${API_BASE_URL}/api/event-types/${id}`);
       setSuccess('Event type deleted successfully');
       fetchEventTypes();
     } catch (err) {

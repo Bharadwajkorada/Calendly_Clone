@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Save } from 'lucide-react';
 import axios from 'axios';
 
+// ✅ 1. ADD BACKEND BASE URL
+const API_BASE_URL = "https://calendly-clone-backend-rabv.onrender.com";
+
 const Availability = () => {
   const [availability, setAvailability] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,9 +38,14 @@ const Availability = () => {
     fetchAvailability();
   }, []);
 
+  
   const fetchAvailability = async () => {
     try {
-      const response = await axios.get('/api/availability');
+      // const response = await axios.get('/api/availability');
+      // ✅ 2. FIX FETCH API CALL
+      const response = await axios.get(
+        `${API_BASE_URL}/api/availability`
+      );
       setAvailability(response.data);
     } catch (err) {
       setError('Failed to fetch availability settings');
@@ -54,7 +62,12 @@ const Availability = () => {
     setSuccess('');
 
     try {
-      await axios.put(`/api/availability/${availability._id}`, availability);
+      // await axios.put(`/api/availability/${availability._id}`, availability);
+        // ✅ 3. FIX SAVE API CALL
+      await axios.put(
+        `${API_BASE_URL}/api/availability/${availability._id}`,
+        availability
+      );
       setSuccess('Availability settings saved successfully');
     } catch (err) {
       setError('Failed to save availability settings');

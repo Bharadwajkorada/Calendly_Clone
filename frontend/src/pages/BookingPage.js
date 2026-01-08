@@ -6,6 +6,11 @@ import { ArrowLeft, Calendar as CalendarIcon, Clock, User, Mail, MessageSquare }
 import axios from 'axios';
 import 'react-calendar/dist/Calendar.css';
 
+
+
+// ✅ 1. ADD BACKEND BASE URL
+const API_BASE_URL = "https://calendly-clone-backend-rabv.onrender.com";
+
 const BookingPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -38,7 +43,11 @@ const BookingPage = () => {
 
   const fetchEventType = async () => {
     try {
-      const response = await axios.get(`/api/event-types/${slug}`);
+      // const response = await axios.get(`/api/event-types/${slug}`);
+      // ✅ 2. FIX EVENT TYPE FETCH
+       const response = await axios.get(
+        `${API_BASE_URL}/api/event-types/${slug}`
+      );
       setEventType(response.data);
     } catch (err) {
       setError('Event type not found');
@@ -51,12 +60,22 @@ const BookingPage = () => {
     setError('');
     
     try {
-      const response = await axios.get('/api/bookings/available-slots', {
-        params: {
-          date: format(selectedDate, 'yyyy-MM-dd'),
-          eventTypeId: eventType._id
+      // const response = await axios.get('/api/bookings/available-slots', {
+      //   params: {
+      //     date: format(selectedDate, 'yyyy-MM-dd'),
+      //     eventTypeId: eventType._id
+      //   }
+      // });
+      // ✅ 3. FIX AVAILABLE SLOTS FETCH
+      const response = await axios.get(
+        `${API_BASE_URL}/api/bookings/available-slots`,
+        {
+          params: {
+            date: format(selectedDate, 'yyyy-MM-dd'),
+            eventTypeId: eventType._id
+          }
         }
-      });
+      );
       setAvailableSlots(response.data.availableSlots);
     } catch (err) {
       setError('Failed to load available time slots');
@@ -86,13 +105,24 @@ const BookingPage = () => {
     setError('');
 
     try {
-      const response = await axios.post('/api/bookings', {
-        eventTypeId: eventType._id,
-        inviteeName: formData.inviteeName,
-        inviteeEmail: formData.inviteeEmail,
-        startTime: selectedSlot.startTime,
-        notes: formData.notes
-      });
+      // const response = await axios.post('/api/bookings', {
+      //   eventTypeId: eventType._id,
+      //   inviteeName: formData.inviteeName,
+      //   inviteeEmail: formData.inviteeEmail,
+      //   startTime: selectedSlot.startTime,
+      //   notes: formData.notes
+      // });
+      // ✅ 4. FIX CREATE BOOKING API
+      const response = await axios.post(
+        `${API_BASE_URL}/api/bookings`,
+        {
+          eventTypeId: eventType._id,
+          inviteeName: formData.inviteeName,
+          inviteeEmail: formData.inviteeEmail,
+          startTime: selectedSlot.startTime,
+          notes: formData.notes
+        }
+      );
 
       navigate(`/confirmation/${response.data._id}`);
     } catch (err) {

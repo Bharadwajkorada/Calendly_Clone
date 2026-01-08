@@ -3,6 +3,10 @@ import { Calendar, Clock, Users, X, CheckCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import axios from 'axios';
 
+// ✅ 1. ADD BACKEND BASE URL
+const API_BASE_URL = "https://calendly-clone-backend-rabv.onrender.com";
+
+
 const Meetings = () => {
   const [meetings, setMeetings] = useState([]);
   const [activeTab, setActiveTab] = useState('upcoming');
@@ -14,10 +18,16 @@ const Meetings = () => {
     fetchMeetings();
   }, [activeTab]);
 
+  
   const fetchMeetings = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/meetings?type=${activeTab}`);
+      
+      // const response = await axios.get(`/api/meetings?type=${activeTab}`);
+  // ✅ 2. FIX FETCH MEETINGS API
+      const response = await axios.get(
+        `${API_BASE_URL}/api/meetings?type=${activeTab}`
+      );
       setMeetings(response.data);
     } catch (err) {
       setError('Failed to fetch meetings');
@@ -32,7 +42,11 @@ const Meetings = () => {
     }
 
     try {
-      await axios.put(`/api/meetings/${meetingId}/cancel`);
+      // await axios.put(`/api/meetings/${meetingId}/cancel`);
+      // ✅ 3. FIX CANCEL MEETING API
+      await axios.put(
+        `${API_BASE_URL}/api/meetings/${meetingId}/cancel`
+      );
       setSuccess('Meeting cancelled successfully');
       fetchMeetings();
     } catch (err) {
